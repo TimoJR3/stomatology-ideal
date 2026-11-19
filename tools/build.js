@@ -25,6 +25,13 @@ console.log(`dist/: ${files} файлов, ${(bytes / 1024).toFixed(0)} КБ`);
 if (process.argv.includes('--zip')) {
   const zip = path.join(root, `${pkg.site.slug}-netlify.zip`);
   fs.rmSync(zip, { force: true });
-  execFileSync('tar', ['-a', '-cf', zip, ...fs.readdirSync(dist)], { cwd: dist, stdio: 'inherit' });
+  const entries = fs.readdirSync(dist);
+  if (process.platform === 'win32') {
+    // системный tar.exe из Windows умеет ZIP; tar из Git Bash — нет, поэтому путь указан явно
+    const tar = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
+    execFileSync(tar, ['-a', '-cf', path.relative(dist, zip), ...entries], { cwd: dist, stdio: 'inherit' });
+  } else {
+    execFileSync('zip', ['-qr', path.relative(dist, zip), ...entries], { cwd: dist, stdio: 'inherit' });
+  }
   console.log('Архив: ' + path.basename(zip));
 }
