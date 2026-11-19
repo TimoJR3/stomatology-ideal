@@ -1,0 +1,22 @@
+# сборка и зависимости
+node_modules/
+dist/
+*.zip
+netlify-upload/
+
+# секреты и ключи — никогда не коммитить
+.env
+.env.*
+deploy_key
+deploy_key.pub
+*.pem
+*.key
+
+# системное
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# личные заметки
+ПРОМПТ.md

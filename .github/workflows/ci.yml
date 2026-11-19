@@ -1,0 +1,110 @@
+# CI/CD: проверки на каждый push и pull request, деплой на сервер — только из main.
+# Деплой включится, когда в Settings → Secrets and variables → Actions появятся секреты
+# DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_KEY, DEPLOY_KNOWN_HOSTS (см. deploy/SERVER.md).
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  DEPLOY_PATH: /var/www/ortodont-rashid
+
+jobs:
+  test:
+    name: Проверки и сборка
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - name: Установка инструментов (без install-скриптов)
+        run: npm ci --ignore-scripts
+      - name: Аудит зависимостей
+        run: npm audit --audit-level=high
+      - name: Линтеры (JS, HTML, CSS)
+        run: npm run lint
+      - name: Тесты
+        run: npm test
+      - name: Проверка конфига nginx
+        run: bash tools/nginx-test.sh
+      - name: Сборка
+        run: npm run build
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: site
+          path: dist
+          retention-days: 7
+          if-no-files-found: error
+
+  deploy:
+    name: Деплой на сервер
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    env:
+      HAS_SERVER: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_SSH_KEY != '' }}
+    steps:
+      - name: Сервер ещё не настроен
+        if: env.HAS_SERVER != 'true'
+        run: echo "::notice::Секреты сервера не заданы — деплой пропущен. См. deploy/SERVER.md"
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: env.HAS_SERVER == 'true'
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        if: env.HAS_SERVER == 'true'
+        with:
+          name: site
+          path: dist
+
+      - name: SSH-ключ и отпечаток сервера
+        if: env.HAS_SERVER == 'true'
+        env:
+          SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          test -n "$KNOWN_HOSTS" || { echo "::error::Нужен секрет DEPLOY_KNOWN_HOSTS (отпечаток сервера)"; exit 1; }
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Загрузка на сервер
+        if: env.HAS_SERVER == 'true'
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: bash tools/deploy.sh
+
+      - name: Проверка живого сайта
+        if: env.HAS_SERVER == 'true' && vars.SITE_URL != ''
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: node tools/check.js
+
+      - name: Удаление ключа
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519

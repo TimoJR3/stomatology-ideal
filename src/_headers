@@ -1,0 +1,22 @@
+# Заголовки безопасности и кэширования для Netlify.
+# Файл должен лежать в корне загружаемой папки рядом с index.html.
+# HTTPS и HSTS Netlify включает сам, их здесь нет.
+# X-Robots-Tag — только на время демо (не показывать сайт в поиске). Удалить строку при запуске.
+
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Robots-Tag: noindex, nofollow
+
+# Библиотека и шрифты не меняются (версия в имени папки) — браузер хранит их год
+# и не скачивает повторно. Это экономит трафик и кредиты Netlify.
+/vendor/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable

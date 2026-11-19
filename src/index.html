@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ortodont Rashid — ортодонтия, брекеты и элайнеры</title>
+<meta name="description" content="Ортодонтическая клиника Ortodont Rashid: брекеты, элайнеры, лечение прикуса у детей и взрослых. Запись на консультацию.">
+<meta name="theme-color" content="#0a0f18">
+<!-- ДЕМО: сайт скрыт от поисковиков. Убрать эту строку (и X-Robots-Tag в _headers) при запуске. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/forum-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/golos-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#booking">Перейти к записи</a>
+
+<p class="demo-note">Демо-версия сайта. Имена, адрес, телефоны, цены и отзывы условные и будут заменены реальными.</p>
+
+<header class="site-header">
+  <a class="brand" href="#top" aria-label="Ortodont Rashid, на главную">
+    <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true"><use href="#mark"/></svg>
+    <span class="brand-word">Ortodont<br>Rashid</span>
+  </a>
+  <nav class="nav" aria-label="Разделы">
+    <a href="#doctor">Врач</a>
+    <a href="#services">Услуги</a>
+    <a href="#steps">Этапы</a>
+    <a href="#prices">Цены</a>
+    <a href="#contacts">Контакты</a>
+  </nav>
+  <a class="btn btn-light btn-sm" href="#booking">Записаться</a>
+</header>
+
+<canvas id="tooth-canvas" aria-hidden="true"></canvas>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Ровная улыбка без спешки и&nbsp;сюрпризов</h1>
+      <p class="lead">Ортодонтическая клиника для детей и взрослых. Брекеты, элайнеры и исправление прикуса. Сначала диагностика и понятный план, потом лечение.</p>
+      <div class="actions">
+        <a class="btn btn-light" href="#booking">Записаться на консультацию</a>
+        <a class="btn btn-ghost" data-href="whatsapp" href="#" target="_blank" rel="noopener">Написать в WhatsApp</a>
+      </div>
+      <ul class="hero-facts">
+        <li><strong>Дети с 6–7 лет</strong> и взрослые без ограничений по возрасту</li>
+        <li><strong>План и цена</strong> известны до начала лечения</li>
+        <li><strong>Один врач</strong> ведёт вас от первого снимка до ретейнера</li>
+      </ul>
+    </div>
+    <div class="spot spot-hero" data-spot data-ry="-0.45" data-rx="0.08">
+      <svg class="spot-fallback" viewBox="0 0 100 100" aria-hidden="true"><use href="#tooth"/></svg>
+    </div>
+  </section>
+
+  <!-- ВРАЧ -->
+  <section id="doctor" class="section about">
+    <div class="spot spot-side" data-spot data-ry="0.55" data-rx="0.05"></div>
+    <div class="about-body">
+      <div class="head">
+        <h2>Лечение ведёт один врач от&nbsp;начала до&nbsp;конца</h2>
+        <div class="spot spot-mini" data-spot-m data-ry="0.55"></div>
+      </div>
+      <div class="about-grid">
+        <figure class="photo-ph">
+          <span>Фото врача<br><small>заглушка, 4:5</small></span>
+        </figure>
+        <div>
+          <p><span data-cfg="doctorName">[Имя Фамилия]</span>, врач-ортодонт. Сам проводит консультацию, составляет план и ведёт каждого пациента до ретейнера. Вы всегда знаете, к кому обратиться с вопросом.</p>
+          <p>В клинике <span data-cfg="clinicName">Ortodont Rashid</span> не продают «пакеты». Мы объясняем, что происходит с прикусом, какие есть варианты и сколько стоит каждый.</p>
+          <dl class="facts">
+            <div><dt>Опыт</dt><dd data-cfg="experience">[00] лет в ортодонтии</dd></div>
+            <div><dt>Образование</dt><dd data-cfg="education">[Университет, год]</dd></div>
+            <div><dt>Пациенты</dt><dd>Дети, подростки, взрослые</dd></div>
+            <div><dt>Языки</dt><dd data-cfg="languages">[русский, …]</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- УСЛУГИ -->
+  <section id="services" class="section services">
+    <div class="services-body">
+      <div class="head">
+        <h2>С чем к нам приходят</h2>
+        <div class="spot spot-mini" data-spot-m data-ry="0"></div>
+      </div>
+      <ul class="service-list">
+        <li>
+          <h3>Металлические брекеты</h3>
+          <p>Самая проверенная система. Подходит для большинства случаев, в&nbsp;том числе сложных.</p>
+          <button class="link-btn" data-service="Металлические брекеты">Записаться</button>
+        </li>
+        <li>
+          <h3>Керамические и сапфировые брекеты</h3>
+          <p>Почти незаметны на зубах. Работают так же, как металлические, но выглядят деликатнее.</p>
+          <button class="link-btn" data-service="Керамические или сапфировые брекеты">Записаться</button>
+        </li>
+        <li>
+          <h3>Элайнеры</h3>
+          <p>Прозрачные съёмные каппы. Их снимают, когда едят и чистят зубы. Подходят не всем, решаем после диагностики.</p>
+          <button class="link-btn" data-service="Элайнеры">Записаться</button>
+        </li>
+        <li>
+          <h3>Детская ортодонтия</h3>
+          <p>Пластинки и аппараты, пока челюсть растёт. Первый осмотр у ортодонта лучше пройти в 6–7 лет.</p>
+          <button class="link-btn" data-service="Детская ортодонтия">Записаться</button>
+        </li>
+        <li>
+          <h3>Ретейнеры</h3>
+          <p>Закрепляют результат после брекетов или элайнеров, чтобы зубы не вернулись на прежнее место.</p>
+          <button class="link-btn" data-service="Ретейнеры">Записаться</button>
+        </li>
+        <li>
+          <h3>Консультация и диагностика</h3>
+          <p>Осмотр, снимки, сканирование. На выходе вы получаете план лечения со сроками и стоимостью.</p>
+          <button class="link-btn" data-service="Консультация и диагностика">Записаться</button>
+        </li>
+      </ul>
+    </div>
+    <div class="spot spot-side" data-spot data-ry="0" data-rx="-0.05"></div>
+  </section>
+
+  <!-- ЭТАПЫ -->
+  <section id="steps" class="section steps">
+    <div class="spot spot-side" data-spot data-ry="-0.6" data-rx="0.1"></div>
+    <div class="steps-body">
+      <div class="head">
+        <h2>Как проходит лечение</h2>
+        <div class="spot spot-mini" data-spot-m data-ry="-0.6"></div>
+      </div>
+      <ol class="step-list">
+        <li><h3>Консультация</h3><p>Знакомимся, смотрим прикус, отвечаем на вопросы. Без обязательств начинать лечение.</p></li>
+        <li><h3>Диагностика и план</h3><p>Снимки и сканирование зубов. Вы видите план, сроки и стоимость до начала лечения.</p></li>
+        <li><h3>Установка</h3><p>Фиксируем брекеты или выдаём первые элайнеры. Показываем, как ухаживать за зубами.</p></li>
+        <li><h3>Наблюдение</h3><p>Короткие визиты на коррекцию, обычно раз в 1–2 месяца. Между ними можно написать врачу.</p></li>
+        <li><h3>Закрепление результата</h3><p>Снимаем систему, ставим ретейнер и проверяем, что результат держится.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ЦЕНЫ -->
+  <section id="prices" class="section prices">
+    <div class="prices-body">
+      <div class="head">
+        <h2>Цены</h2>
+        <div class="spot spot-mini" data-spot-m data-ry="0.35"></div>
+      </div>
+      <p class="note">Указаны условные цены «от». Точная стоимость зависит от случая и называется после диагностики.</p>
+      <table class="price-table">
+        <tbody id="price-rows"></tbody>
+      </table>
+    </div>
+    <div class="spot spot-side spot-small" data-spot data-ry="0.35" data-rx="0.1"></div>
+  </section>
+
+  <!-- ОТЗЫВЫ -->
+  <section id="reviews" class="section reviews">
+    <div class="head reviews-head">
+      <div>
+        <h2>Отзывы пациентов</h2>
+        <p class="note">Здесь будут настоящие отзывы. Пока это примеры, чтобы показать, как блок выглядит.</p>
+      </div>
+      <div class="spot spot-rev" data-spot data-spot-m data-ry="0.45" data-rx="0.06"></div>
+    </div>
+    <div class="review-row">
+      <blockquote class="review">
+        <span class="tag">Пример отзыва</span>
+        <p>«Пришла на консультацию с дочкой. Всё объяснили на снимках, расписали два варианта лечения с ценами. Решили не торопиться, врач не уговаривал.»</p>
+        <footer>[Имя пациента], [месяц, год]</footer>
+      </blockquote>
+      <blockquote class="review">
+        <span class="tag">Пример отзыва</span>
+        <p>«Носил керамические брекеты полтора года. На работе почти никто не замечал. Ретейнер поставили в тот же день, когда сняли брекеты.»</p>
+        <footer>[Имя пациента], [месяц, год]</footer>
+      </blockquote>
+      <blockquote class="review">
+        <span class="tag">Пример отзыва</span>
+        <p>«Удобно, что можно написать в WhatsApp, если что-то натирает. Ответили в тот же вечер и подсказали, что делать.»</p>
+        <footer>[Имя пациента], [месяц, год]</footer>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- ЗАПИСЬ -->
+  <section id="booking" class="section booking">
+    <div class="booking-panel">
+      <div class="booking-info">
+        <div class="head">
+          <h2>Запишитесь на консультацию</h2>
+          <div class="spot spot-mini" data-spot-m data-ry="0"></div>
+        </div>
+        <p>Оставьте телефон, и администратор перезвонит, чтобы подобрать время. Или напишите сразу в мессенджер.</p>
+        <div class="quick">
+          <a class="btn btn-light" data-href="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn btn-ghost" data-href="telegram" href="#" target="_blank" rel="noopener">Telegram</a>
+          <a class="btn btn-ghost" data-href="tel" href="#">Позвонить</a>
+        </div>
+        <p class="phone-line"><a data-href="tel" href="#" data-cfg="phoneDisplay">+7 (000) 000-00-00</a></p>
+        <div class="spot spot-side spot-booking" data-spot data-ry="0.25" data-rx="-0.08"></div>
+      </div>
+
+      <!-- method="post": даже если скрипт не загрузится, имя и телефон не попадут в адресную строку -->
+      <form class="booking-form" id="booking-form" method="post" action="#booking" novalidate>
+        <!-- ловушка для ботов: люди это поле не видят и не заполняют -->
+        <div class="hp" aria-hidden="true">
+          <label for="f-website">Сайт</label>
+          <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="f-name">Как к вам обращаться</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" maxlength="80" required>
+          <span class="err" data-err="name">Введите имя</span>
+        </div>
+        <div class="field">
+          <label for="f-phone">Телефон</label>
+          <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 ___ ___-__-__" maxlength="25" required>
+          <span class="err" data-err="phone">Введите номер полностью, минимум 10 цифр</span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="f-service">Услуга</label>
+            <select id="f-service" name="service">
+              <option>Консультация и диагностика</option>
+              <option>Металлические брекеты</option>
+              <option>Керамические или сапфировые брекеты</option>
+              <option>Элайнеры</option>
+              <option>Детская ортодонтия</option>
+              <option>Ретейнеры</option>
+              <option>Пока не знаю</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="f-time">Когда удобно</label>
+            <select id="f-time" name="time">
+              <option>Утром</option>
+              <option>Днём</option>
+              <option>Вечером</option>
+              <option>В выходные</option>
+            </select>
+          </div>
+        </div>
+        <label class="check">
+          <input type="checkbox" name="consent" required>
+          <span>Согласен на обработку персональных данных</span>
+        </label>
+        <span class="err" data-err="consent">Нужно согласие, чтобы мы могли перезвонить</span>
+        <button class="btn btn-light btn-block" type="submit">Отправить заявку</button>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- КОНТАКТЫ -->
+  <section id="contacts" class="section contacts">
+    <div class="contacts-info">
+      <h2>Контакты</h2>
+      <dl class="facts">
+        <div><dt>Адрес</dt><dd data-cfg="address">[Город, улица, дом]</dd></div>
+        <div><dt>Часы работы</dt><dd data-cfg="hours">[Пн–Пт 9:00–19:00, Сб 10:00–16:00]</dd></div>
+        <div><dt>Телефон</dt><dd><a data-href="tel" href="#" data-cfg="phoneDisplay">+7 (000) 000-00-00</a></dd></div>
+        <div><dt>Мессенджеры</dt><dd><a data-href="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>, <a data-href="telegram" href="#" target="_blank" rel="noopener">Telegram</a></dd></div>
+      </dl>
+    </div>
+    <div class="map-ph">
+      <svg class="map-lines" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <path d="M-10 80 C 90 60, 160 120, 410 90" />
+        <path d="M-10 210 C 120 190, 230 250, 410 200" />
+        <path d="M120 -10 C 110 90, 150 180, 130 310" />
+        <path d="M290 -10 C 270 100, 300 200, 280 310" />
+        <path class="thin" d="M-10 140 L 410 150" />
+        <path class="thin" d="M200 -10 L 210 310" />
+      </svg>
+      <div class="spot spot-map" data-spot data-spot-m data-ry="-0.3" data-rx="0.1"></div>
+      <span class="map-label">Здесь будет карта (Яндекс или Google)</span>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true"><use href="#mark"/></svg>
+    <span class="brand-word">Ortodont<br>Rashid</span>
+  </div>
+  <p>Имеются противопоказания. Необходима консультация специалиста.</p>
+  <p>Демо-версия сайта. Информация не является публичной офертой. © <span id="year">2026</span></p>
+</footer>
+
+<nav class="mobile-bar" aria-label="Быстрая связь">
+  <a href="#booking">Записаться</a>
+  <a data-href="whatsapp" href="#" target="_blank" rel="noopener">WhatsApp</a>
+  <a data-href="tel" href="#">Позвонить</a>
+</nav>
+
+<!-- SVG-символы: знак логотипа и зуб -->
+<svg class="sprite" width="0" height="0" aria-hidden="true">
+  <defs>
+    <symbol id="tooth" viewBox="0 0 100 100">
+      <path fill="#f3f5f8" d="M33 20c-10 0-17 8-17 19 0 9 4 14 6 22 3 10 3 25 11 25 7 0 6-15 11-20 3-3 9-3 12 0 5 5 4 20 11 20 8 0 8-15 11-25 2-8 6-13 6-22 0-11-7-19-17-19-7 0-11 4-17 4s-10-4-17-4z"/>
+      <path fill="none" stroke="#1f3a6b" stroke-width="2.6" stroke-linecap="round" d="M20 43 Q50 49 80 43"/>
+      <rect x="43" y="39" width="14" height="11" rx="2.5" fill="#1f3a6b"/>
+    </symbol>
+    <symbol id="mark" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#1f3a6b" stroke="#8b9bb2" stroke-width="6"/>
+      <use href="#tooth" x="22" y="20" width="56" height="56"/>
+    </symbol>
+  </defs>
+</svg>
+
+<script src="config.js"></script>
+<script src="js/main.js"></script>
+
+<script type="module" src="js/tooth.js"></script>
+</body>
+</html>

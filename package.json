@@ -1,0 +1,33 @@
+{
+  "name": "ortodont-rashid-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Сайт ортодонтической клиники Ortodont Rashid (демо)",
+  "site": {
+    "slug": "ortodont-rashid",
+    "title": "Ortodont Rashid",
+    "url": "https://ortodont-rashid.netlify.app"
+  },
+  "scripts": {
+    "start": "node tools/serve.js src",
+    "build": "node tools/build.js",
+    "build:zip": "node tools/build.js --zip",
+    "lint": "npm run lint:js && npm run lint:html && npm run lint:css",
+    "lint:js": "eslint .",
+    "lint:html": "html-validate src/index.html",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "test": "node --test tests/",
+    "check:live": "node tools/check.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.14.0",
+    "globals": "17.14.0",
+    "html-validate": "11.18.0",
+    "stylelint": "18.0.0",
+    "stylelint-config-recommended": "19.0.0"
+  }
+}
