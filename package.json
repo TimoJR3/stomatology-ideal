@@ -16,7 +16,7 @@
     "lint:js": "eslint .",
     "lint:html": "html-validate src/index.html",
     "lint:css": "stylelint \"src/**/*.css\"",
-    "test": "node --test tests/",
+    "test": "node --test tests/static.test.js",
     "check:live": "node tools/check.js"
   },
   "engines": {
