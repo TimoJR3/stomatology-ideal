@@ -95,6 +95,16 @@ test('_headers: строгий CSP', () => {
   for (const v of Object.values(csp)) assert.doesNotMatch(v, /unsafe-inline|unsafe-eval|\*/);
 });
 
+test('_headers: неизменяемые папки (vendor, fonts) кэшируются на год', () => {
+  const text = read('_headers');
+  for (const dir of ['vendor', 'fonts']) {
+    if (!fs.existsSync(path.join(SRC, dir))) continue;
+    const block = text.split(/\r?\n(?=\S)/).find((b) => b.startsWith('/' + dir + '/*'));
+    assert.ok(block, 'нет правила /' + dir + '/* в _headers');
+    assert.match(block, /Cache-Control:\s*public,\s*max-age=31536000,\s*immutable/, 'кэш для /' + dir + '/*');
+  }
+});
+
 test('nginx отдаёт те же заголовки защиты, что и _headers', () => {
   const a = headersFromNetlify(), b = headersFromNginx();
   for (const name of ['content-security-policy', 'x-content-type-options', 'x-frame-options', 'referrer-policy', 'permissions-policy', 'cross-origin-opener-policy', 'cross-origin-resource-policy', 'x-robots-tag']) {

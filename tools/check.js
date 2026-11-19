@@ -42,11 +42,13 @@ const localRefs = (text, re) => [...text.matchAll(re)].map((m) => m[1])
 
   console.log('\nПодключённые файлы');
   const refs = new Set(localRefs(html, /\s(?:src|href)=["']([^"']+)["']/gi));
-  for (const ref of [...refs]) {
-    if (!ref.endsWith('.css')) continue;
-    const css = await (await get('/' + ref)).text();
-    const dir = ref.includes('/') ? ref.slice(0, ref.lastIndexOf('/') + 1) : '';
-    localRefs(css, /url\(["']?([^"')]+)["']?\)/gi).forEach((u) => refs.add(dir + u));
+  // файлы, которые подключают CSS (url(...)) и JS-модули (import ... from '...'), тоже проверяем
+  const resolve = (base, rel) => new URL(rel, 'https://x/' + base).pathname.slice(1);
+  for (const ref of refs) { // Set перебирает и добавленные по ходу элементы — импорты импортов тоже
+    if (!/\.(css|js)$/.test(ref)) continue;
+    const text = await (await get('/' + ref)).text();
+    const re = ref.endsWith('.css') ? /url\(["']?([^"')]+)["']?\)/gi : /\bfrom\s+['"](\.{1,2}\/[^'"]+)['"]/g;
+    localRefs(text, re).forEach((u) => refs.add(resolve(ref, u)));
   }
   for (const ref of refs) {
     const p = '/' + ref.replace(/^\.?\//, '');
