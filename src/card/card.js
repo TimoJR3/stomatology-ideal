@@ -16,7 +16,18 @@
     map: httpsOnly(CARD.mapUrl),
     map2gis: httpsOnly(CARD.map2gisUrl),
   };
+  // нет Telegram — кнопка становится «В контакты» (скачивает contact.vcf)
+  if (String(CARD.telegram || "").replace(/[^A-Za-z0-9_]/g, "").length < 5) {
+    const tg = $('.acts [data-href="telegram"]');
+    if (tg) {
+      tg.removeAttribute("data-href"); tg.removeAttribute("target"); tg.removeAttribute("rel");
+      tg.href = "contact.vcf"; tg.setAttribute("download", "");
+      tg.querySelector("use").setAttribute("href", "#i-user"); tg.querySelector("span").textContent = "В контакты";
+    }
+  }
   $$("[data-href]").forEach((a) => { const h = hrefs[a.dataset.href]; if (h) a.href = h; });
+  // пустые строки контактов (например, часы работы) не показываем
+  $$(".card-facts [data-cfg]").forEach((n) => { if (!CARD[n.dataset.cfg]) n.parentElement.remove(); });
 
   const social = $("#social");
   (CARD.social || []).forEach(([name, url]) => {

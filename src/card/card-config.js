@@ -6,22 +6,22 @@
 const CARD = {
   name: "Стоматология IDEAL",
   tagline: "Стоматологическая клиника",
-  city: "[Город]",
+  city: "Дербент",
   lead: "Лечение и исправление прикуса для детей и взрослых: брекеты, элайнеры, консультация и диагностика. Семейная практика отца и сына.",
   cardUrl: "https://stomatology-ideal.netlify.app/card/", // адрес визитки: зашит в QR и в контакт
 
-  phoneDisplay: "+7 (000) 000-00-00",   // как показывать номер
-  phoneTel: "+70000000000",             // тот же номер для звонка
-  whatsapp: "70000000000",              // номер WhatsApp, только цифры
-  telegram: "username",                 // ник в Telegram без @
-  instagram: "https://instagram.com/username", // ссылка на профиль Instagram (только https://)
+  phoneDisplay: "+7 (903) 480-54-14",   // как показывать номер
+  phoneTel: "+79034805414",             // тот же номер для звонка
+  whatsapp: "79034805414",              // номер WhatsApp, только цифры
+  telegram: "",                 // ник в Telegram без @ (пусто — вместо кнопки будет «В контакты»)
+  instagram: "https://www.instagram.com/ideal_ortodont/", // ссылка на профиль Instagram (только https://)
 
-  address: "[Город, улица, дом]",
-  hours: "[Пн–Пт 9:00–19:00, Сб 10:00–16:00]",
-  mapUrl: "https://yandex.ru/maps/?text=%5B%D0%B0%D0%B4%D1%80%D0%B5%D1%81%5D",
-  map2gisUrl: "https://2gis.ru/search/%5B%D0%B0%D0%B4%D1%80%D0%B5%D1%81%5D",
+  address: "Республика Дагестан, г. Дербент, пер. Карла Маркса",
+  hours: "", // часы работы, например «Пн–Пт 9:00–19:00» (пусто — строка скрыта)
+  mapUrl: "https://yandex.ru/maps/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%20%D0%9A%D0%B0%D1%80%D0%BB%D0%B0%20%D0%9C%D0%B0%D1%80%D0%BA%D1%81%D0%B0",
+  map2gisUrl: "https://2gis.ru/search/%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%20%D0%9A%D0%B0%D1%80%D0%BB%D0%B0%20%D0%9C%D0%B0%D1%80%D0%BA%D1%81%D0%B0",
   social: [                             // строка «Мы в сети», только https://
-    ["Instagram", "https://instagram.com/username"],
+    ["Instagram", "https://www.instagram.com/ideal_ortodont/"],
   ],
 
   // Врачи. У каждого могут быть свои телефон / WhatsApp / Telegram (пустые не показываются).

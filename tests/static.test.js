@@ -166,7 +166,7 @@ test('визитка: card-config.js корректен, внешние ссыл
   assert.ok(CARD.name, 'name');
   assert.match(CARD.phoneTel, /^\+?\d{10,15}$/, 'phoneTel');
   assert.match(CARD.whatsapp, /^\d{10,15}$/, 'whatsapp');
-  assert.match(CARD.telegram, /^[A-Za-z0-9_]{5,32}$/, 'telegram');
+  if (CARD.telegram) assert.match(CARD.telegram, /^[A-Za-z0-9_]{5,32}$/, 'telegram'); // пусто — кнопки Telegram нет
   for (const key of ['cardUrl', 'instagram', 'mapUrl', 'map2gisUrl']) if (CARD[key]) assert.equal(new URL(CARD[key]).protocol, 'https:', key);
   for (const [, url] of CARD.social || []) assert.equal(new URL(url).protocol, 'https:', 'social ' + url);
 });

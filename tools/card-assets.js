@@ -25,10 +25,11 @@ const vcf = [
   `TEL;TYPE=WORK,VOICE:${String(CARD.phoneTel).replace(/[^\d+]/g, '')}`,
   `ADR;TYPE=WORK:;;${esc(CARD.address)};;;;`,
   `URL:${url.href}`,
-  `NOTE:${esc(CARD.hours)}`,
+  CARD.instagram ? `X-SOCIALPROFILE;TYPE=instagram:${new URL(CARD.instagram).href}` : null,
+  CARD.hours ? `NOTE:${esc(CARD.hours)}` : null,
   'END:VCARD',
   '',
-].join('\r\n');
+].filter((l) => l !== null).join('\r\n');
 fs.writeFileSync(path.join(ROOT, 'src/card/contact.vcf'), vcf);
 
 /* ---------- QR ---------- */

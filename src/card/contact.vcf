@@ -4,8 +4,8 @@ N:;Стоматология IDEAL;;;
 FN:Стоматология IDEAL
 ORG:Стоматология IDEAL
 TITLE:Стоматологическая клиника
-TEL;TYPE=WORK,VOICE:+70000000000
-ADR;TYPE=WORK:;;[Город\, улица\, дом];;;;
+TEL;TYPE=WORK,VOICE:+79034805414
+ADR;TYPE=WORK:;;Республика Дагестан\, г. Дербент\, пер. Карла Маркса;;;;
 URL:https://stomatology-ideal.netlify.app/card/
-NOTE:[Пн–Пт 9:00–19:00\, Сб 10:00–16:00]
+X-SOCIALPROFILE;TYPE=instagram:https://www.instagram.com/ideal_ortodont/
 END:VCARD
