@@ -16,7 +16,10 @@
 .card-lead { margin: 16px auto 0; max-width: 30em; color: var(--mist); }
 
 /* ---------- кнопки связи ---------- */
-.acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 28px; }
+/* сетка на 6 долей: 6 кнопок — по 3 в ряд; 5 кнопок (нет Telegram) — 3 сверху и 2 широкие снизу */
+.acts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-top: 28px; }
+.acts > * { grid-column: span 2; }
+.acts > :nth-child(4):nth-last-child(2), .acts > :nth-child(5):last-child { grid-column: span 3; }
 .act {
   display: grid; justify-items: center; align-content: center; gap: 8px;
   min-height: 88px; padding: 12px 6px;
@@ -52,6 +55,19 @@
 .doc ul { margin: 0; padding: 0 0 0 18px; color: var(--steel); font-size: 14px; }
 .doc li + li { margin-top: 2px; }
 
+/* врач с фото: портрет во всю ширину с аркой сверху (как у заглушки), имя поверх нижнего края */
+.doc.doc-has-photo { grid-template-columns: 1fr; gap: 0; padding: 0; overflow: hidden; }
+.doc-photo { position: relative; margin: 0; }
+.doc-photo img {
+  display: block; width: 100%; height: auto; aspect-ratio: 6 / 5; object-fit: cover; object-position: 50% 30%;
+  border-radius: 50% 50% 0 0 / 34% 34% 0 0;
+}
+/* нижний край фото плавно уходит в фон карточки */
+.doc-photo img { -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent); mask-image: linear-gradient(180deg, #000 72%, transparent); }
+.doc-photo figcaption { position: relative; z-index: 1; margin-top: -22px; padding: 0 18px; }
+.doc-photo .doc-role { margin-bottom: 0; }
+.doc-has-photo .doc-body { padding: 6px 18px 18px; }
+
 /* услуги */
 .tags { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 .tags li { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); color: var(--mist); font-size: 14px; }
@@ -69,6 +85,8 @@
 
 @media (max-width: 380px) {
   .acts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .acts > *, .acts > :nth-child(4):nth-last-child(2) { grid-column: span 1; }
+  .acts > :nth-child(5):last-child { grid-column: 1 / -1; }
   .doc { grid-template-columns: 1fr; }
   .card-head { grid-template-columns: minmax(0, 1fr) 80px; }
   .card .spot-mini { width: 80px; }

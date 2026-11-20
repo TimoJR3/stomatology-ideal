@@ -16,15 +16,8 @@
     map: httpsOnly(CARD.mapUrl),
     map2gis: httpsOnly(CARD.map2gisUrl),
   };
-  // нет Telegram — кнопка становится «В контакты» (скачивает contact.vcf)
-  if (String(CARD.telegram || "").replace(/[^A-Za-z0-9_]/g, "").length < 5) {
-    const tg = $('.acts [data-href="telegram"]');
-    if (tg) {
-      tg.removeAttribute("data-href"); tg.removeAttribute("target"); tg.removeAttribute("rel");
-      tg.href = "contact.vcf"; tg.setAttribute("download", "");
-      tg.querySelector("use").setAttribute("href", "#i-user"); tg.querySelector("span").textContent = "В контакты";
-    }
-  }
+  // нет Telegram — кнопки Telegram нет (сетка кнопок перестраивается под 5 штук в card.css)
+  if (String(CARD.telegram || "").replace(/[^A-Za-z0-9_]/g, "").length < 5) $$('[data-href="telegram"]').forEach((a) => a.remove());
   $$("[data-href]").forEach((a) => { const h = hrefs[a.dataset.href]; if (h) a.href = h; });
   // пустые строки контактов (например, часы работы) не показываем
   $$(".card-facts [data-cfg]").forEach((n) => { if (!CARD[n.dataset.cfg]) n.parentElement.remove(); });
@@ -38,10 +31,22 @@
   /* ---------- врачи ---------- */
   const team = $("#team-list");
   (CARD.team || []).forEach((d) => {
-    const li = el("li", "doc");
-    const ph = el("div", "doc-ph", "фото"); ph.setAttribute("aria-hidden", "true");
-    const box = el("div");
-    box.append(el("h3", null, d.name), el("p", "doc-role", d.role));
+    // фото — только локальный файл из папки team/ (без внешних ссылок)
+    const photo = /^team\/[\w-]+\.(webp|jpe?g|png)$/.test(d.photo || "") ? d.photo : "";
+    const li = el("li", photo ? "doc doc-has-photo" : "doc");
+    let ph;
+    if (photo) {
+      // большой портрет: фото на всю ширину карточки, имя и должность поверх нижнего края
+      ph = el("figure", "doc-photo");
+      const img = el("img"); img.src = photo; img.alt = "Фото: " + d.name; img.width = 620; img.height = 479; img.loading = "lazy"; img.decoding = "async";
+      const cap = el("figcaption");
+      cap.append(el("h3", null, d.name), el("p", "doc-role", d.role));
+      ph.append(img, cap);
+    } else {
+      ph = el("div", "doc-ph", "фото"); ph.setAttribute("aria-hidden", "true");
+    }
+    const box = el("div", "doc-body");
+    if (!photo) box.append(el("h3", null, d.name), el("p", "doc-role", d.role));
     const ul = el("ul"); (d.facts || []).forEach((f) => ul.append(el("li", null, f)));
     box.append(ul);
     const links = el("div", "doc-links");

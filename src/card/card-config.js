@@ -16,10 +16,10 @@ const CARD = {
   telegram: "",                 // ник в Telegram без @ (пусто — вместо кнопки будет «В контакты»)
   instagram: "https://www.instagram.com/ideal_ortodont/", // ссылка на профиль Instagram (только https://)
 
-  address: "Республика Дагестан, г. Дербент, пер. Карла Маркса",
+  address: "Республика Дагестан, г. Дербент, пер. Карла Маркса, 49А",
   hours: "", // часы работы, например «Пн–Пт 9:00–19:00» (пусто — строка скрыта)
-  mapUrl: "https://yandex.ru/maps/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%20%D0%9A%D0%B0%D1%80%D0%BB%D0%B0%20%D0%9C%D0%B0%D1%80%D0%BA%D1%81%D0%B0",
-  map2gisUrl: "https://2gis.ru/search/%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%20%D0%9A%D0%B0%D1%80%D0%BB%D0%B0%20%D0%9C%D0%B0%D1%80%D0%BA%D1%81%D0%B0",
+  mapUrl: "https://yandex.ru/maps/-/CXWwyEJ9",
+  map2gisUrl: "https://2gis.ru/search/%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%20%D0%9A%D0%B0%D1%80%D0%BB%D0%B0%20%D0%9C%D0%B0%D1%80%D0%BA%D1%81%D0%B0%2C%2049%D0%90",
   social: [                             // строка «Мы в сети», только https://
     ["Instagram", "https://www.instagram.com/ideal_ortodont/"],
   ],
@@ -28,7 +28,8 @@ const CARD = {
   team: [
     { name: "[Имя Фамилия]", role: "[Должность, например: врач-стоматолог, основатель клиники]",
       facts: ["Стаж: [00] лет", "Образование: [вуз, год]", "[Специализация, курсы, награды]"],
-      phoneTel: "", whatsapp: "", telegram: "" },
+      phoneTel: "", whatsapp: "", telegram: "",
+      photo: "team/doctor-1.webp" }, // фото: файл в src/card/team/
     { name: "[Имя Фамилия]", role: "Врач-ортодонт",
       facts: ["Стаж: [00] лет", "Образование: [вуз, ординатура, год]", "[Брекеты, элайнеры, курсы]"],
       phoneTel: "", whatsapp: "", telegram: "" },
