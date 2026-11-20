@@ -79,12 +79,10 @@ fs.writeFileSync(path.join(ROOT, 'src/card/ortodont-rashid.vcf'), vcf);
     if (Math.hypot(x + 0.5 - c, y + 0.5 - c) < R + 0.6) continue; // модули под логотипом не рисуем
     dh += `M${x} ${y}h1v1h-1z`;
   }
-  const tooth = 'M33 20c-10 0-17 8-17 19 0 9 4 14 6 22 3 10 3 25 11 25 7 0 6-15 11-20 3-3 9-3 12 0 5 5 4 20 11 20 8 0 8-15 11-25 2-8 6-13 6-22 0-11-7-19-17-19-7 0-11 4-17 4s-10-4-17-4z';
-  const logo = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#ffffff"/>
-<circle cx="${cx}" cy="${cy}" r="${(r * 0.86).toFixed(3)}" fill="#1f3a6b" stroke="#8b9bb2" stroke-width="${(r * 0.1).toFixed(3)}"/>
-<path transform="translate(${(cx - r * 0.5).toFixed(3)} ${(cy - r * 0.52).toFixed(3)}) scale(${(r / 100).toFixed(4)})" fill="#f3f5f8" d="${tooth}"/>
-<path transform="translate(${(cx - r * 0.5).toFixed(3)} ${(cy - r * 0.52).toFixed(3)}) scale(${(r / 100).toFixed(4)})" fill="none" stroke="#1f3a6b" stroke-width="3" stroke-linecap="round" d="M20 43 Q50 49 80 43"/>
-<rect transform="translate(${(cx - r * 0.5).toFixed(3)} ${(cy - r * 0.52).toFixed(3)}) scale(${(r / 100).toFixed(4)})" x="43" y="39" width="14" height="11" rx="2.5" fill="#1f3a6b"/>`;
+  // логотип в центре QR: design/logo-ideal.png (круг 600×600 с прозрачными углами), встраивается в SVG целиком
+  const logoPng = fs.readFileSync(path.join(ROOT, 'design/logo-ideal.png')).toString('base64');
+  const logo = (cx, cy, r) => { const s = r * 0.92; return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#ffffff"/>
+<image x="${(cx - s).toFixed(3)}" y="${(cy - s).toFixed(3)}" width="${(2 * s).toFixed(3)}" height="${(2 * s).toFixed(3)}" href="data:image/png;base64,${logoPng}"/>`; };
   const qrLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-q} ${-q} ${N + 2 * q} ${N + 2 * q}">
 <rect x="${-q}" y="${-q}" width="${N + 2 * q}" height="${N + 2 * q}" fill="#ffffff"/>
 <path fill="#0a0f18" shape-rendering="crispEdges" d="${dh}"/>
