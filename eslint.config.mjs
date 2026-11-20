@@ -6,13 +6,17 @@ export default [
   js.configs.recommended,
   {
     // данные клиники: объявляют глобальный CONFIG
-    files: ['src/config.js'],
+    files: ['src/config.js', 'src/card/card-config.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: globals.browser },
-    rules: { 'no-unused-vars': ['error', { varsIgnorePattern: '^CONFIG$' }] },
+    rules: { 'no-unused-vars': ['error', { varsIgnorePattern: '^(CONFIG|CARD)$' }] },
   },
   {
-    files: ['src/js/main.js', 'src/card/card.js'],
+    files: ['src/js/main.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.browser, CONFIG: 'readonly' } },
+  },
+  {
+    files: ['src/card/card.js'],
+    languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.browser, CARD: 'readonly' } },
   },
   {
     files: ['src/js/*.js'],

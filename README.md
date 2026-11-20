@@ -14,7 +14,7 @@ src/                 сайт — именно это попадает на се
   config.js          ДАННЫЕ КЛИНИКИ: врач, телефоны, адрес, цены
   js/main.js         логика страницы (контакты, цены, форма)
   js/tooth.js        3D-зуб, движущийся при прокрутке (three.js)
-  card/              визитка для QR-кода и NFC-метки: страница, стили, логика, фото «до/после», контакт .vcf
+  card/              визитка «Стоматология IDEAL» для QR-кода и NFC-метки: страница, данные (card-config.js), контакт .vcf
   vendor/            three.js 0.160.0 из npm, с контрольными суммами SHA256SUMS
   fonts/             шрифты (OFL), без Google Fonts
   _headers           заголовки защиты для Netlify
@@ -38,7 +38,7 @@ docs/                памятки
 | `npm run lint` | ESLint, html-validate, Stylelint |
 | `npm run build` | собрать `dist/` |
 | `npm run build:zip` | `dist/` + архив для ручной загрузки на Netlify |
-| `npm run card` | заново создать контакт .vcf, QR-код и макет бумажной визитки из config.js |
+| `npm run card` | заново создать контакт .vcf, QR-код и макет бумажной визитки из src/card/card-config.js |
 | `npm run check:live -- https://адрес` | проверить опубликованный сайт (заголовки, файлы, закрытые пути) |
 
 На Windows то же самое делают «Открыть сайт локально.cmd» и «Собрать для Netlify.cmd».

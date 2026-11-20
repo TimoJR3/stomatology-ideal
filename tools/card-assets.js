@@ -1,16 +1,16 @@
-// Готовит файлы для визитки из src/config.js:
-//   src/card/ortodont-rashid.vcf  — контакт для кнопки «В контакты»
+// Готовит файлы для визитки «Стоматология IDEAL» из src/card/card-config.js:
+//   src/card/contact.vcf          — контакт для кнопки «Сохранить контакт»
 //   design/qr-card.svg, .png      — QR-код на адрес визитки (cardUrl) для печати
 //   design/print-card.svg         — макет бумажной визитки 90×50 мм с QR-кодом
-// Запуск: npm run card   (после изменения телефона, адреса или cardUrl в config.js)
+// Запуск: npm run card   (после изменения телефона, адреса или cardUrl в card-config.js)
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 const QRCode = require('qrcode');
 
 const ROOT = path.join(__dirname, '..');
-const CONFIG = vm.runInContext(fs.readFileSync(path.join(ROOT, 'src/config.js'), 'utf8') + '\n;CONFIG', vm.createContext({}));
-const url = new URL(CONFIG.cardUrl);
+const CARD = vm.runInContext(fs.readFileSync(path.join(ROOT, 'src/card/card-config.js'), 'utf8') + '\n;CARD', vm.createContext({}));
+const url = new URL(CARD.cardUrl);
 if (url.protocol !== 'https:') throw new Error('cardUrl должен начинаться с https://');
 
 /* ---------- vCard 3.0 ---------- */
@@ -18,18 +18,18 @@ const esc = (s) => String(s).replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replac
 const vcf = [
   'BEGIN:VCARD',
   'VERSION:3.0',
-  `N:;${esc(CONFIG.clinicName)};;;`,
-  `FN:${esc(CONFIG.clinicName)}`,
-  `ORG:${esc(CONFIG.clinicName)}`,
-  `TITLE:${esc(CONFIG.cardTagline)}`,
-  `TEL;TYPE=WORK,VOICE:${String(CONFIG.phoneTel).replace(/[^\d+]/g, '')}`,
-  `ADR;TYPE=WORK:;;${esc(CONFIG.address)};;;;`,
+  `N:;${esc(CARD.name)};;;`,
+  `FN:${esc(CARD.name)}`,
+  `ORG:${esc(CARD.name)}`,
+  `TITLE:${esc(CARD.tagline)}`,
+  `TEL;TYPE=WORK,VOICE:${String(CARD.phoneTel).replace(/[^\d+]/g, '')}`,
+  `ADR;TYPE=WORK:;;${esc(CARD.address)};;;;`,
   `URL:${url.href}`,
-  `NOTE:${esc(CONFIG.hours)}`,
+  `NOTE:${esc(CARD.hours)}`,
   'END:VCARD',
   '',
 ].join('\r\n');
-fs.writeFileSync(path.join(ROOT, 'src/card/ortodont-rashid.vcf'), vcf);
+fs.writeFileSync(path.join(ROOT, 'src/card/contact.vcf'), vcf);
 
 /* ---------- QR ---------- */
 (async () => {
@@ -51,16 +51,16 @@ fs.writeFileSync(path.join(ROOT, 'src/card/ortodont-rashid.vcf'), vcf);
   const s = 30 / (n + 2 * q); // QR 30×30 мм
   const card = `<svg xmlns="http://www.w3.org/2000/svg" width="90mm" height="50mm" viewBox="0 0 90 50">
 <style>
-  @font-face { font-family: Forum; src: url("../src/fonts/forum-latin.woff2") format("woff2"); }
+  @font-face { font-family: Forum; src: url("../src/fonts/forum-cyrillic.woff2") format("woff2"); unicode-range: U+0400-045F; }
+  @font-face { font-family: Forum; src: url("../src/fonts/forum-latin.woff2") format("woff2"); unicode-range: U+0000-00FF; }
   @font-face { font-family: Golos; src: url("../src/fonts/golos-cyrillic.woff2") format("woff2"); }
   .t { font-family: Forum, serif; fill: #f3f5f8; }
   .s { font-family: Golos, sans-serif; fill: #b9c5d5; }
 </style>
 <rect width="90" height="50" fill="#0a0f18"/>
-<circle cx="14" cy="14" r="7.4" fill="#1f3a6b" stroke="#8b9bb2" stroke-width="1"/>
-<path transform="translate(9.5 9.3) scale(0.09)" fill="#f3f5f8" d="M33 20c-10 0-17 8-17 19 0 9 4 14 6 22 3 10 3 25 11 25 7 0 6-15 11-20 3-3 9-3 12 0 5 5 4 20 11 20 8 0 8-15 11-25 2-8 6-13 6-22 0-11-7-19-17-19-7 0-11 4-17 4s-10-4-17-4z"/>
-<text class="t" x="6" y="31" font-size="5.6" letter-spacing="0.4">ORTODONT</text>
-<text class="t" x="6" y="37.5" font-size="5.6" letter-spacing="0.4">RASHID</text>
+<image x="6" y="5" width="16" height="16" href="data:image/png;base64,${fs.readFileSync(path.join(ROOT, 'design/logo-ideal.png')).toString('base64')}"/>
+<text class="t" x="6" y="31" font-size="4.6" letter-spacing="0.4">СТОМАТОЛОГИЯ</text>
+<text class="t" x="6" y="38" font-size="6.2" letter-spacing="0.6">IDEAL</text>
 <text class="s" x="6" y="44.5" font-size="2.6">Наведите камеру на QR-код</text>
 <rect x="53" y="7" width="32" height="32" rx="2.4" fill="#ffffff"/>
 <g transform="translate(54 8) scale(${s.toFixed(5)}) translate(${q} ${q})"><path fill="#0a0f18" d="${d}"/></g>
@@ -96,7 +96,8 @@ ${logo(c, c, R)}
   const t = 112 / (N + 2 * q); // код 112×112 мм
   const plaque = `<svg xmlns="http://www.w3.org/2000/svg" width="150mm" height="150mm" viewBox="0 0 150 150">
 <style>
-  @font-face { font-family: Forum; src: url("../src/fonts/forum-latin.woff2") format("woff2"); }
+  @font-face { font-family: Forum; src: url("../src/fonts/forum-cyrillic.woff2") format("woff2"); unicode-range: U+0400-045F; }
+  @font-face { font-family: Forum; src: url("../src/fonts/forum-latin.woff2") format("woff2"); unicode-range: U+0000-00FF; }
   @font-face { font-family: Golos; src: url("../src/fonts/golos-cyrillic.woff2") format("woff2"); }
 </style>
 <rect width="150" height="150" rx="6" fill="#ffffff"/>
@@ -104,7 +105,7 @@ ${logo(c, c, R)}
 <path fill="#0a0f18" shape-rendering="crispEdges" d="${dh}"/>
 ${logo(c, c, R)}
 </g>
-<text x="75" y="131" font-family="Forum, serif" font-size="9" letter-spacing="1.2" text-anchor="middle" fill="#1f3a6b">ORTODONT RASHID</text>
+<text x="75" y="131" font-family="Forum, serif" font-size="9" letter-spacing="1.2" text-anchor="middle" fill="#1f3a6b">СТОМАТОЛОГИЯ IDEAL</text>
 <text x="75" y="141" font-family="Golos, sans-serif" font-size="4.4" text-anchor="middle" fill="#4b5b72">Наведите камеру — откроется визитка клиники</text>
 </svg>
 `;

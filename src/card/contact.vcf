@@ -1,0 +1,11 @@
+BEGIN:VCARD
+VERSION:3.0
+N:;Стоматология IDEAL;;;
+FN:Стоматология IDEAL
+ORG:Стоматология IDEAL
+TITLE:Стоматологическая клиника
+TEL;TYPE=WORK,VOICE:+70000000000
+ADR;TYPE=WORK:;;[Город\, улица\, дом];;;;
+URL:https://stomatology-ideal.netlify.app/card/
+NOTE:[Пн–Пт 9:00–19:00\, Сб 10:00–16:00]
+END:VCARD

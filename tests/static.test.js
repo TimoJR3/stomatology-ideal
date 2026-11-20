@@ -157,20 +157,26 @@ test('config.js корректен и содержит допустимые ко
   assert.match(CONFIG.telegram, /^[A-Za-z0-9_]{5,32}$/, 'telegram');
   assert.ok(Array.isArray(CONFIG.prices) && CONFIG.prices.length > 0, 'prices');
   for (const row of CONFIG.prices) assert.ok(Array.isArray(row) && row.length === 2 && row.every((x) => typeof x === 'string'), 'строка цены');
-  // внешние ссылки из конфига — только https://
-  for (const key of ['cardUrl', 'siteUrl', 'mapUrl']) if (CONFIG[key]) assert.equal(new URL(CONFIG[key]).protocol, 'https:', key);
   for (const [, url] of CONFIG.social || []) assert.equal(new URL(url).protocol, 'https:', 'social ' + url);
-  // фото работ «до/после» лежат на самом сайте
-  for (const w of CONFIG.works || []) for (const f of [w.before, w.after]) {
-    assert.ok(fs.existsSync(path.join(SRC, 'card', f)), 'нет фото работы: card/' + f);
-  }
 });
 
-test('визитка: файл контакта (vCard) совпадает с config.js', { skip: !fs.existsSync(path.join(SRC, 'card/ortodont-rashid.vcf')) }, () => {
-  const CONFIG = vm.runInContext(read('config.js') + '\n;CONFIG', vm.createContext({}));
-  const vcf = read('card/ortodont-rashid.vcf');
+const hasCard = fs.existsSync(path.join(SRC, 'card/card-config.js'));
+test('визитка: card-config.js корректен, внешние ссылки только https', { skip: !hasCard }, () => {
+  const CARD = vm.runInContext(read('card/card-config.js') + '\n;CARD', vm.createContext({}));
+  assert.ok(CARD.name, 'name');
+  assert.match(CARD.phoneTel, /^\+?\d{10,15}$/, 'phoneTel');
+  assert.match(CARD.whatsapp, /^\d{10,15}$/, 'whatsapp');
+  assert.match(CARD.telegram, /^[A-Za-z0-9_]{5,32}$/, 'telegram');
+  for (const key of ['cardUrl', 'instagram', 'mapUrl', 'map2gisUrl']) if (CARD[key]) assert.equal(new URL(CARD[key]).protocol, 'https:', key);
+  for (const [, url] of CARD.social || []) assert.equal(new URL(url).protocol, 'https:', 'social ' + url);
+});
+
+test('визитка: файл контакта (vCard) совпадает с card-config.js', { skip: !hasCard }, () => {
+  const CARD = vm.runInContext(read('card/card-config.js') + '\n;CARD', vm.createContext({}));
+  const vcf = read('card/contact.vcf');
   assert.match(vcf, /^BEGIN:VCARD\r\nVERSION:3\.0\r\n/);
-  assert.ok(vcf.includes('TEL;TYPE=WORK,VOICE:' + CONFIG.phoneTel.replace(/[^\d+]/g, '') + '\r\n'), 'телефон в vCard устарел — запустите npm run card');
-  assert.ok(vcf.includes('URL:' + new URL(CONFIG.cardUrl).href + '\r\n'), 'адрес визитки в vCard устарел — запустите npm run card');
-  assert.match(read('_headers'), /\/card\/ortodont-rashid\.vcf\s+Content-Type: text\/vcard/, 'нет Content-Type для vCard в _headers');
+  assert.ok(vcf.includes('FN:' + CARD.name + '\r\n'), 'название в vCard устарело — запустите npm run card');
+  assert.ok(vcf.includes('TEL;TYPE=WORK,VOICE:' + CARD.phoneTel.replace(/[^\d+]/g, '') + '\r\n'), 'телефон в vCard устарел — запустите npm run card');
+  assert.ok(vcf.includes('URL:' + new URL(CARD.cardUrl).href + '\r\n'), 'адрес визитки в vCard устарел — запустите npm run card');
+  assert.match(read('_headers'), /\/card\/contact\.vcf\s+Content-Type: text\/vcard/, 'нет Content-Type для vCard в _headers');
 });
