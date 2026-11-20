@@ -55,6 +55,8 @@
     if (tel.length >= 10) add("Позвонить", "tel:" + tel);
     if (wa.length >= 10) add("WhatsApp", "https://wa.me/" + wa, true);
     if (tg.length >= 5) add("Telegram", "https://t.me/" + tg, true);
+    const own = httpsOnly(d.card || "");
+    if (own) add("Визитка врача", own, true);
     if (links.children.length) box.append(links);
     li.append(ph, box); team.append(li);
   });
