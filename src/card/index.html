@@ -55,7 +55,16 @@
       <svg class="act-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-share"/></svg><span>Поделиться</span>
     </button>
   </nav>
+  <button class="qr-open" id="qr-open" type="button">Показать QR-код визитки</button>
   <p class="share-status" id="share-status" role="status" aria-live="polite"></p>
+
+  <!-- QR на экране: второй человек сканирует его своим телефоном -->
+  <dialog class="qr-dialog" id="qr-dialog" aria-labelledby="qr-title">
+    <h2 id="qr-title">Отсканируйте камерой</h2>
+    <img src="qr.svg" alt="QR-код со ссылкой на эту визитку" width="260" height="260">
+    <p>Откроется эта же визитка клиники.</p>
+    <button class="btn btn-light btn-block" id="qr-close" type="button">Закрыть</button>
+  </dialog>
 
   <section class="card-sec" id="team" aria-labelledby="team-title">
     <div class="card-head">
@@ -112,6 +121,7 @@
       <div><dt>Адрес</dt><dd data-cfg="address">[Город, улица, дом]</dd></div>
       <div><dt>Часы работы</dt><dd data-cfg="hours">[Пн–Пт 9:00–19:00, Сб 10:00–16:00]</dd></div>
       <div><dt>Телефон</dt><dd><a data-href="tel" href="#" data-cfg="phoneDisplay">+7 (000) 000-00-00</a></dd></div>
+      <div><dt>На карте</dt><dd><a data-href="map" href="#" target="_blank" rel="noopener">Яндекс.Карты</a>, <a data-href="map2gis" href="#" target="_blank" rel="noopener">2ГИС</a></dd></div>
       <div><dt>Мы в сети</dt><dd class="social" id="social"></dd></div>
     </dl>
     <a class="btn btn-light btn-block" data-href="whatsapp" href="#" target="_blank" rel="noopener">Записаться на консультацию</a>
@@ -123,6 +133,12 @@
     <p>Демо-визитка. Информация не является публичной офертой.</p>
   </footer>
 </main>
+
+<!-- закреплённая панель внизу: главное действие всегда под пальцем -->
+<nav class="card-bar" aria-label="Быстрые действия">
+  <a class="card-bar-main" data-href="tel" href="#">Позвонить</a>
+  <a href="ortodont-rashid.vcf" download>Сохранить контакт</a>
+</nav>
 
 <!-- SVG-символы: знак, зуб и значки кнопок -->
 <svg class="sprite" width="0" height="0" aria-hidden="true">

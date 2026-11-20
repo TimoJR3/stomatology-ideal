@@ -68,5 +68,49 @@ fs.writeFileSync(path.join(ROOT, 'src/card/ortodont-rashid.vcf'), vcf);
 </svg>
 `;
   fs.writeFileSync(path.join(ROOT, 'design/print-card.svg'), card);
-  console.log(`Готово: vCard, QR ${n}×${n} модулей на ${url.href}, макет визитки 90×50 мм`);
+
+  /* ---------- QR с логотипом в центре (как на табличке) ----------
+     Уровень коррекции H: код читается, даже если ~30% модулей закрыто. Логотип закрывает ~8%. */
+  const qh = QRCode.create(url.href, { errorCorrectionLevel: 'H' });
+  const N = qh.modules.size, D = qh.modules.data, c = N / 2, R = N * 0.16; // радиус белой площадки под логотип
+  let dh = '';
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    if (!D[y * N + x]) continue;
+    if (Math.hypot(x + 0.5 - c, y + 0.5 - c) < R + 0.6) continue; // модули под логотипом не рисуем
+    dh += `M${x} ${y}h1v1h-1z`;
+  }
+  const tooth = 'M33 20c-10 0-17 8-17 19 0 9 4 14 6 22 3 10 3 25 11 25 7 0 6-15 11-20 3-3 9-3 12 0 5 5 4 20 11 20 8 0 8-15 11-25 2-8 6-13 6-22 0-11-7-19-17-19-7 0-11 4-17 4s-10-4-17-4z';
+  const logo = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#ffffff"/>
+<circle cx="${cx}" cy="${cy}" r="${(r * 0.86).toFixed(3)}" fill="#1f3a6b" stroke="#8b9bb2" stroke-width="${(r * 0.1).toFixed(3)}"/>
+<path transform="translate(${(cx - r * 0.5).toFixed(3)} ${(cy - r * 0.52).toFixed(3)}) scale(${(r / 100).toFixed(4)})" fill="#f3f5f8" d="${tooth}"/>
+<path transform="translate(${(cx - r * 0.5).toFixed(3)} ${(cy - r * 0.52).toFixed(3)}) scale(${(r / 100).toFixed(4)})" fill="none" stroke="#1f3a6b" stroke-width="3" stroke-linecap="round" d="M20 43 Q50 49 80 43"/>
+<rect transform="translate(${(cx - r * 0.5).toFixed(3)} ${(cy - r * 0.52).toFixed(3)}) scale(${(r / 100).toFixed(4)})" x="43" y="39" width="14" height="11" rx="2.5" fill="#1f3a6b"/>`;
+  const qrLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-q} ${-q} ${N + 2 * q} ${N + 2 * q}">
+<rect x="${-q}" y="${-q}" width="${N + 2 * q}" height="${N + 2 * q}" fill="#ffffff"/>
+<path fill="#0a0f18" shape-rendering="crispEdges" d="${dh}"/>
+${logo(c, c, R)}
+</svg>
+`;
+  fs.writeFileSync(path.join(ROOT, 'src/card/qr.svg'), qrLogo);       // для кнопки «Показать QR» на визитке
+  fs.writeFileSync(path.join(ROOT, 'design/qr-logo.svg'), qrLogo);
+
+  /* ---------- табличка 150×150 мм для стены/ресепшена ---------- */
+  const t = 112 / (N + 2 * q); // код 112×112 мм
+  const plaque = `<svg xmlns="http://www.w3.org/2000/svg" width="150mm" height="150mm" viewBox="0 0 150 150">
+<style>
+  @font-face { font-family: Forum; src: url("../src/fonts/forum-latin.woff2") format("woff2"); }
+  @font-face { font-family: Golos; src: url("../src/fonts/golos-cyrillic.woff2") format("woff2"); }
+</style>
+<rect width="150" height="150" rx="6" fill="#ffffff"/>
+<g transform="translate(19 10) scale(${t.toFixed(5)}) translate(${q} ${q})">
+<path fill="#0a0f18" shape-rendering="crispEdges" d="${dh}"/>
+${logo(c, c, R)}
+</g>
+<text x="75" y="131" font-family="Forum, serif" font-size="9" letter-spacing="1.2" text-anchor="middle" fill="#1f3a6b">ORTODONT RASHID</text>
+<text x="75" y="141" font-family="Golos, sans-serif" font-size="4.4" text-anchor="middle" fill="#4b5b72">Наведите камеру — откроется визитка клиники</text>
+</svg>
+`;
+  fs.writeFileSync(path.join(ROOT, 'design/qr-plaque.svg'), plaque);
+
+  console.log(`Готово: vCard, QR ${n}×${n} (обычный) и ${N}×${N} (с логотипом) на ${url.href}, визитка 90×50 мм, табличка 150×150 мм`);
 })();

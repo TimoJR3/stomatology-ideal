@@ -15,6 +15,7 @@
     whatsapp: "https://wa.me/" + String(CONFIG.whatsapp).replace(/\D/g, ""),
     telegram: "https://t.me/" + String(CONFIG.telegram).replace(/[^A-Za-z0-9_]/g, ""),
     map: httpsOnly(CONFIG.mapUrl),
+    map2gis: httpsOnly(CONFIG.map2gisUrl),
     site: httpsOnly(CONFIG.siteUrl),
   };
   $$("[data-href]").forEach((a) => { const h = hrefs[a.dataset.href]; if (h) a.href = h; });
@@ -33,8 +34,23 @@
     const box = el("div");
     box.append(el("h3", null, d.name), el("p", "doc-role", d.role));
     const ul = el("ul"); (d.facts || []).forEach((f) => ul.append(el("li", null, f)));
-    box.append(ul); li.append(ph, box); team.append(li);
+    box.append(ul);
+    // личные кнопки связи врача (только заполненные)
+    const links = el("div", "doc-links");
+    const add = (text, href, ext) => { const a = el("a", null, text); a.href = href; if (ext) { a.target = "_blank"; a.rel = "noopener"; } links.append(a); };
+    const tel = String(d.phoneTel || "").replace(/[^\d+]/g, ""), wa = String(d.whatsapp || "").replace(/\D/g, ""), tg = String(d.telegram || "").replace(/[^A-Za-z0-9_]/g, "");
+    if (tel.length >= 10) add("Позвонить", "tel:" + tel);
+    if (wa.length >= 10) add("WhatsApp", "https://wa.me/" + wa, true);
+    if (tg.length >= 5) add("Telegram", "https://t.me/" + tg, true);
+    if (links.children.length) box.append(links);
+    li.append(ph, box); team.append(li);
   });
+
+  /* ---------- QR на экране ---------- */
+  const dlg = $("#qr-dialog");
+  $("#qr-open").addEventListener("click", () => (dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", "")));
+  $("#qr-close").addEventListener("click", () => (dlg.close ? dlg.close() : dlg.removeAttribute("open")));
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); }); // клик по фону закрывает
 
   /* ---------- до / после ---------- */
   const works = (CONFIG.works || []).filter((w) => localPath(w.before) && localPath(w.after));
