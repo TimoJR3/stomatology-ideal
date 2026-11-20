@@ -5,3 +5,4 @@
 *.jpg binary
 *.zip binary
 src/vendor/** -diff linguist-vendored
+*.vcf -text
