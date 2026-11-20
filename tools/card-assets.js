@@ -45,7 +45,7 @@ fs.writeFileSync(path.join(ROOT, 'src/card/ortodont-rashid.vcf'), vcf);
 </svg>
 `;
   fs.writeFileSync(path.join(ROOT, 'design/qr-card.svg'), qrSvg);
-  await QRCode.toFile(path.join(ROOT, 'design/qr-card.png'), url.href, { errorCorrectionLevel: 'M', width: 1200, margin: 4, color: { dark: '#0a0f18', light: '#ffffff' } });
+  await QRCode.toFile(path.join(ROOT, 'design/qr-card.png'), url.href, { errorCorrectionLevel: 'M', width: 3000, margin: 4, color: { dark: '#0a0f18', light: '#ffffff' } });
 
   /* ---------- макет визитки 90×50 мм (открыть в браузере → печать в PDF) ---------- */
   const s = 30 / (n + 2 * q); // QR 30×30 мм
