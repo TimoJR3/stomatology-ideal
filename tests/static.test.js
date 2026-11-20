@@ -22,6 +22,9 @@ function walk(dir, out = []) {
   return out;
 }
 const cssFiles = walk(SRC).filter((f) => f.endsWith('.css'));
+// все страницы сайта (главная, визитка и т. д.) и весь свой JS (без vendor/)
+const pages = walk(SRC).filter((f) => f.endsWith('.html')).map((f) => ({ file: f, rel: path.relative(SRC, f), html: fs.readFileSync(f, 'utf8') }));
+const ownJs = walk(SRC).filter((f) => f.endsWith('.js') && !f.includes(path.sep + 'vendor' + path.sep));
 
 function parseCsp(value) {
   const map = {};
@@ -50,10 +53,12 @@ function headersFromNginx() {
   return out;
 }
 
-test('все локальные файлы из index.html существуют', () => {
-  const refs = [...html.matchAll(/\s(?:src|href)="([^"]+)"/g)].map((m) => m[1]).filter(isLocal);
-  assert.ok(refs.length > 3);
-  for (const ref of refs) assert.ok(fs.existsSync(path.join(SRC, ref.split('?')[0])), 'нет файла: ' + ref);
+test('все локальные файлы со всех страниц существуют', () => {
+  for (const p of pages) {
+    const refs = [...p.html.matchAll(/\s(?:src|href)="([^"]+)"/g)].map((m) => m[1]).filter(isLocal);
+    assert.ok(refs.length > 3, p.rel + ': подозрительно мало ссылок');
+    for (const ref of refs) assert.ok(fs.existsSync(path.join(path.dirname(p.file), ref.split('?')[0])), p.rel + ': нет файла ' + ref);
+  }
 });
 
 test('CSS ссылается только на существующие локальные файлы', () => {
@@ -68,15 +73,17 @@ test('CSS ссылается только на существующие лока
 });
 
 test('в HTML нет встроенных скриптов, стилей и обработчиков событий', () => {
-  assert.doesNotMatch(html, /<script(?![^>]*\bsrc=)[^>]*>/i, 'встроенный <script>');
-  assert.doesNotMatch(html, /\sstyle="/i, 'атрибут style');
-  assert.doesNotMatch(html, /\son[a-z]+="/i, 'обработчик on…=');
-  assert.doesNotMatch(html, /<style[\s>]/i, 'тег <style>');
+  for (const p of pages) {
+    assert.doesNotMatch(p.html, /<script(?![^>]*\bsrc=)[^>]*>/i, p.rel + ': встроенный <script>');
+    assert.doesNotMatch(p.html, /\sstyle="/i, p.rel + ': атрибут style');
+    assert.doesNotMatch(p.html, /\son[a-z]+="/i, p.rel + ': обработчик on…=');
+    assert.doesNotMatch(p.html, /<style[\s>]/i, p.rel + ': тег <style>');
+  }
 });
 
 test('ничего не грузится с чужих сайтов', () => {
-  assert.doesNotMatch(html, /<(script|link|img|iframe|source|video|audio)[^>]+(src|href)="(https?:)?\/\//i);
-  for (const f of walk(path.join(SRC, 'js'))) {
+  for (const p of pages) assert.doesNotMatch(p.html, /<(script|link|img|iframe|source|video|audio)[^>]+(src|href)="(https?:)?\/\//i, p.rel);
+  for (const f of ownJs) {
     const js = fs.readFileSync(f, 'utf8');
     assert.doesNotMatch(js, /import\s[^;]*from\s+['"]https?:/, path.relative(SRC, f) + ': импорт с чужого сайта');
     assert.doesNotMatch(js, /\b(eval|new Function)\s*\(/, path.relative(SRC, f) + ': eval');
@@ -121,7 +128,7 @@ test('форма: POST, ловушка для ботов, ограничение
 });
 
 test('ссылки target="_blank" защищены rel="noopener"', () => {
-  for (const m of html.matchAll(/<a\s[^>]*target="_blank"[^>]*>/g)) assert.match(m[0], /rel="[^"]*noopener/, m[0]);
+  for (const p of pages) for (const m of p.html.matchAll(/<a\s[^>]*target="_blank"[^>]*>/g)) assert.match(m[0], /rel="[^"]*noopener/, p.rel + ': ' + m[0]);
 });
 
 test('библиотеки не изменены (SHA-256 совпадают)', () => {
@@ -150,4 +157,20 @@ test('config.js корректен и содержит допустимые ко
   assert.match(CONFIG.telegram, /^[A-Za-z0-9_]{5,32}$/, 'telegram');
   assert.ok(Array.isArray(CONFIG.prices) && CONFIG.prices.length > 0, 'prices');
   for (const row of CONFIG.prices) assert.ok(Array.isArray(row) && row.length === 2 && row.every((x) => typeof x === 'string'), 'строка цены');
+  // внешние ссылки из конфига — только https://
+  for (const key of ['cardUrl', 'siteUrl', 'mapUrl']) if (CONFIG[key]) assert.equal(new URL(CONFIG[key]).protocol, 'https:', key);
+  for (const [, url] of CONFIG.social || []) assert.equal(new URL(url).protocol, 'https:', 'social ' + url);
+  // фото работ «до/после» лежат на самом сайте
+  for (const w of CONFIG.works || []) for (const f of [w.before, w.after]) {
+    assert.ok(fs.existsSync(path.join(SRC, 'card', f)), 'нет фото работы: card/' + f);
+  }
+});
+
+test('визитка: файл контакта (vCard) совпадает с config.js', { skip: !fs.existsSync(path.join(SRC, 'card/ortodont-rashid.vcf')) }, () => {
+  const CONFIG = vm.runInContext(read('config.js') + '\n;CONFIG', vm.createContext({}));
+  const vcf = read('card/ortodont-rashid.vcf');
+  assert.match(vcf, /^BEGIN:VCARD\r\nVERSION:3\.0\r\n/);
+  assert.ok(vcf.includes('TEL;TYPE=WORK,VOICE:' + CONFIG.phoneTel.replace(/[^\d+]/g, '') + '\r\n'), 'телефон в vCard устарел — запустите npm run card');
+  assert.ok(vcf.includes('URL:' + new URL(CONFIG.cardUrl).href + '\r\n'), 'адрес визитки в vCard устарел — запустите npm run card');
+  assert.match(read('_headers'), /\/card\/ortodont-rashid\.vcf\s+Content-Type: text\/vcard/, 'нет Content-Type для vCard в _headers');
 });

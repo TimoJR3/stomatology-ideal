@@ -35,15 +35,26 @@ const localRefs = (text, re) => [...text.matchAll(re)].map((m) => m[1])
   if (h('x-robots-tag').includes('noindex')) warn('сайт скрыт от поисковиков (noindex) — так и нужно для демо, убрать при запуске');
   else ok('сайт открыт для поисковиков');
 
-  console.log('\nКод страницы');
-  check(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(html), 'нет встроенных скриптов');
-  check(!/<(script|link|img|iframe)[^>]+(src|href)=["']https?:/i.test(html), 'нет загрузок с чужих сайтов');
-  check(!/\sstyle=["']/i.test(html), 'нет встроенных стилей');
+  // все страницы из package.json (site.pages): главная, визитка и т. д.
+  const resolve = (base, rel) => new URL(rel, 'https://x/' + base).pathname.slice(1);
+  const refs = new Set();
+  for (const page of pkg.site.pages || ['/']) {
+    console.log('\nКод страницы ' + page);
+    const pr = page === '/' ? r : await get(page);
+    const ph = page === '/' ? html : await pr.text();
+    if (page !== '/') {
+      check(pr.status === 200, 'отвечает 200 (сейчас ' + pr.status + ')');
+      check((pr.headers.get('content-security-policy') || '') === csp, 'тот же CSP, что на главной');
+    }
+    check(!/<script(?![^>]*\bsrc=)[^>]*>/i.test(ph), 'нет встроенных скриптов');
+    check(!/<(script|link|img|iframe)[^>]+(src|href)=["']https?:/i.test(ph), 'нет загрузок с чужих сайтов');
+    check(!/\sstyle=["']/i.test(ph), 'нет встроенных стилей');
+    localRefs(ph, /\s(?:src|href)=["']([^"']+)["']/gi).forEach((u) => refs.add(resolve(page.slice(1), u)));
+  }
+  refs.delete('');
 
   console.log('\nПодключённые файлы');
-  const refs = new Set(localRefs(html, /\s(?:src|href)=["']([^"']+)["']/gi));
   // файлы, которые подключают CSS (url(...)) и JS-модули (import ... from '...'), тоже проверяем
-  const resolve = (base, rel) => new URL(rel, 'https://x/' + base).pathname.slice(1);
   for (const ref of refs) { // Set перебирает и добавленные по ходу элементы — импорты импортов тоже
     if (!/\.(css|js)$/.test(ref)) continue;
     const text = await (await get('/' + ref)).text();
@@ -56,6 +67,7 @@ const localRefs = (text, re) => [...text.matchAll(re)].map((m) => m[1])
     const cc = x.headers.get('cache-control') || '';
     check(x.status === 200, p + ' → ' + x.status + ' ' + (x.headers.get('content-type') || ''));
     if (/^\/(fonts|vendor)\//.test(p)) check(cc.includes('immutable'), p + ' кэшируется на год');
+    if (p.endsWith('.vcf')) check((x.headers.get('content-type') || '').startsWith('text/vcard'), p + ' отдаётся как контакт (text/vcard)');
   }
 
   console.log('\nЗакрытые служебные пути');

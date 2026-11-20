@@ -20,3 +20,8 @@
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Контакт для кнопки «В контакты» на визитке: телефон предложит добавить его в записную книжку
+/card/ortodont-rashid.vcf
+  Content-Type: text/vcard; charset=utf-8
+  Content-Disposition: attachment; filename="ortodont-rashid.vcf"

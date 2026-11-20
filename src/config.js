@@ -28,4 +28,28 @@ const CONFIG = {
     ["Детская пластинка", "от [00 000]"],
     ["Ретейнер", "от [0 000]"],
   ],
+
+  /* ---------- визитка (страница /card/, на неё ведут QR-код и NFC-метка) ---------- */
+  cardUrl: "https://ortodont-rashid.netlify.app/card/", // адрес визитки: зашит в QR и в контакт
+  siteUrl: "https://ortodont-rashid.netlify.app/",      // полный сайт клиники
+  cardTagline: "Частная ортодонтическая клиника",
+  city: "[Город]",
+  mapUrl: "https://yandex.ru/maps/?text=%5B%D0%B0%D0%B4%D1%80%D0%B5%D1%81%5D", // ссылка «Как добраться»
+  social: [                                             // только ссылки https://
+    ["Telegram-канал", "https://t.me/username"],
+    ["ВКонтакте", "https://vk.com/username"],
+  ],
+  team: [
+    { name: "[Имя Фамилия]", role: "[Должность, например: врач-стоматолог, основатель клиники]",
+      facts: ["Стаж: [00] лет", "Образование: [вуз, год]", "[Специализация, курсы, награды]"] },
+    { name: "[Имя Фамилия]", role: "Врач-ортодонт",
+      facts: ["Стаж: [00] лет", "Образование: [вуз, ординатура, год]", "[Брекеты, элайнеры, курсы]"] },
+  ],
+  // Работы «до и после». before/after — фото в папке card/works/ (с письменного согласия пациента).
+  // Пока там рисунки-примеры.
+  works: [
+    { title: "[Скученность зубов]", method: "[Брекеты, 18 месяцев]", before: "works/example-1-before.svg", after: "works/example-1-after.svg" },
+    { title: "[Щель между зубами]", method: "[Элайнеры, 10 месяцев]", before: "works/example-2-before.svg", after: "works/example-2-after.svg" },
+    { title: "[Глубокий прикус]", method: "[Брекеты, 24 месяца]", before: "works/example-3-before.svg", after: "works/example-3-after.svg" },
+  ],
 };

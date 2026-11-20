@@ -6,7 +6,11 @@
   "site": {
     "slug": "ortodont-rashid",
     "title": "Ortodont Rashid",
-    "url": "https://ortodont-rashid.netlify.app"
+    "url": "https://ortodont-rashid.netlify.app",
+    "pages": [
+      "/",
+      "/card/"
+    ]
   },
   "scripts": {
     "start": "node tools/serve.js src",
@@ -14,10 +18,11 @@
     "build:zip": "node tools/build.js --zip",
     "lint": "npm run lint:js && npm run lint:html && npm run lint:css",
     "lint:js": "eslint .",
-    "lint:html": "html-validate src/index.html",
+    "lint:html": "html-validate \"src/**/*.html\"",
     "lint:css": "stylelint \"src/**/*.css\"",
     "test": "node --test tests/static.test.js",
-    "check:live": "node tools/check.js"
+    "check:live": "node tools/check.js",
+    "card": "node tools/card-assets.js"
   },
   "engines": {
     "node": ">=22"
@@ -27,6 +32,7 @@
     "eslint": "10.15.0",
     "globals": "17.14.0",
     "html-validate": "11.21.1",
+    "qrcode": "1.5.4",
     "stylelint": "18.0.0",
     "stylelint-config-recommended": "19.0.0"
   }

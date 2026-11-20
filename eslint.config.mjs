@@ -11,7 +11,7 @@ export default [
     rules: { 'no-unused-vars': ['error', { varsIgnorePattern: '^CONFIG$' }] },
   },
   {
-    files: ['src/js/main.js'],
+    files: ['src/js/main.js', 'src/card/card.js'],
     languageOptions: { ecmaVersion: 2022, sourceType: 'script', globals: { ...globals.browser, CONFIG: 'readonly' } },
   },
   {
