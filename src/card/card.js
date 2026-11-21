@@ -43,7 +43,15 @@
       cap.append(el("h3", null, d.name), el("p", "doc-role", d.role));
       ph.append(img, cap);
     } else {
-      ph = el("div", "doc-ph", "фото"); ph.setAttribute("aria-hidden", "true");
+      // без фото — монограмма: инициалы в арке и значок специальности (у ортодонта зуб с брекетом)
+      ph = el("div", "doc-mono"); ph.setAttribute("aria-hidden", "true");
+      const initials = String(d.name).replace(/[[\]]/g, "").split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("");
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("class", "doc-mono-ico");
+      const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      use.setAttribute("href", /ортодонт/i.test(d.role) ? "#tooth" : "#tooth-plain");
+      svg.append(use);
+      ph.append(el("span", "doc-mono-txt", initials), svg);
     }
     const box = el("div", "doc-body");
     if (!photo) box.append(el("h3", null, d.name), el("p", "doc-role", d.role));

@@ -1,4 +1,4 @@
-# CI/CD: проверки на каждый push и pull request, деплой на сервер — только из main.
+# CI/CD: проверки на каждый push и pull request; из main — публикация на GitHub Pages и деплой на свой сервер.
 # Деплой включится, когда в Settings → Secrets and variables → Actions появятся секреты
 # DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_KEY, DEPLOY_KNOWN_HOSTS (см. deploy/SERVER.md).
 name: CI/CD
@@ -108,3 +108,30 @@ jobs:
       - name: Удаление ключа
         if: always()
         run: rm -f ~/.ssh/id_ed25519
+
+  pages:
+    name: Публикация на GitHub Pages
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: site
+          path: dist
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

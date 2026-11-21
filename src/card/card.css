@@ -50,6 +50,15 @@
   border: 1px dashed var(--steel); background: linear-gradient(180deg, rgba(31, 58, 107, .45), rgba(16, 24, 39, .6));
   display: grid; place-items: center; font-size: 12px; color: var(--steel); text-align: center;
 }
+/* монограмма врача: арка как на логотипе — синий фон, серо-голубой кант, инициалы шрифтом с засечками */
+.doc-mono {
+  width: 92px; aspect-ratio: 4 / 5; border-radius: 46px 46px 14px 14px;
+  border: 3px solid rgba(139, 155, 178, .62);
+  background: radial-gradient(circle at 50% 30%, #2a4a84, var(--navy) 55%, var(--navy-deep));
+  display: grid; place-items: center; align-content: center; gap: 6px;
+}
+.doc-mono-txt { font: 400 2.1rem/1 var(--serif); letter-spacing: .04em; color: var(--enamel); }
+.doc-mono-ico { width: 26px; height: 26px; opacity: .9; }
 .doc h3 { font-size: 1.35rem; }
 .doc-role { margin: 4px 0 8px; color: var(--mist); font-size: 15px; }
 .doc ul { margin: 0; padding: 0 0 0 18px; color: var(--steel); font-size: 14px; }
