@@ -57,13 +57,17 @@
     if (!photo) box.append(el("h3", null, d.name), el("p", "doc-role", d.role));
     const ul = el("ul"); (d.facts || []).forEach((f) => ul.append(el("li", null, f)));
     box.append(ul);
-    // фото награды: миниатюра с подписью, нажатие открывает целиком (только свой файл из awards/)
-    const [awardImg, awardCap] = Array.isArray(d.award) ? d.award : [];
-    if (/^awards\/[\w-]+\.(webp|jpe?g|png)$/.test(awardImg || "")) {
-      const a = el("a", "doc-award"); a.href = awardImg; a.target = "_blank"; a.rel = "noopener";
-      const img = el("img"); img.src = awardImg; img.alt = awardCap || "Награда"; img.width = 833; img.height = 1103; img.loading = "lazy"; img.decoding = "async";
-      a.append(img, el("span", null, awardCap || ""));
-      box.append(a);
+    // награды и сертификаты: ряд миниатюр с подписями, листается вбок; нажатие открывает целиком
+    const awards = (Array.isArray(d.awards) ? d.awards : []).filter(([f]) => /^awards\/[\w-]+\.(webp|jpe?g|png)$/.test(f || ""));
+    if (awards.length) {
+      box.append(el("p", "doc-awards-h", "Награды и сертификаты"));
+      const row = el("ul", "doc-awards");
+      awards.forEach(([file, caption]) => {
+        const li = el("li"), a = el("a"); a.href = file; a.target = "_blank"; a.rel = "noopener";
+        const img = el("img"); img.src = file; img.alt = caption || "Награда"; img.width = 264; img.height = 200; img.loading = "lazy"; img.decoding = "async";
+        a.append(img, el("span", null, caption || "")); li.append(a); row.append(li);
+      });
+      box.append(row);
     }
     const links = el("div", "doc-links");
     const add = (text, href, ext) => { const a = el("a", null, text); a.href = href; if (ext) { a.target = "_blank"; a.rel = "noopener"; } links.append(a); };
