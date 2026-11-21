@@ -57,6 +57,14 @@
     if (!photo) box.append(el("h3", null, d.name), el("p", "doc-role", d.role));
     const ul = el("ul"); (d.facts || []).forEach((f) => ul.append(el("li", null, f)));
     box.append(ul);
+    // фото награды: миниатюра с подписью, нажатие открывает целиком (только свой файл из awards/)
+    const [awardImg, awardCap] = Array.isArray(d.award) ? d.award : [];
+    if (/^awards\/[\w-]+\.(webp|jpe?g|png)$/.test(awardImg || "")) {
+      const a = el("a", "doc-award"); a.href = awardImg; a.target = "_blank"; a.rel = "noopener";
+      const img = el("img"); img.src = awardImg; img.alt = awardCap || "Награда"; img.width = 833; img.height = 1103; img.loading = "lazy"; img.decoding = "async";
+      a.append(img, el("span", null, awardCap || ""));
+      box.append(a);
+    }
     const links = el("div", "doc-links");
     const add = (text, href, ext) => { const a = el("a", null, text); a.href = href; if (ext) { a.target = "_blank"; a.rel = "noopener"; } links.append(a); };
     const tel = String(d.phoneTel || "").replace(/[^\d+]/g, ""), wa = String(d.whatsapp || "").replace(/\D/g, ""), tg = String(d.telegram || "").replace(/[^A-Za-z0-9_]/g, "");

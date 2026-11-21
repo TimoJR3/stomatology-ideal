@@ -59,6 +59,14 @@
 }
 .doc-mono-txt { font: 400 2.1rem/1 var(--serif); letter-spacing: .04em; color: var(--enamel); }
 .doc-mono-ico { width: 26px; height: 26px; opacity: .9; }
+/* награда врача: миниатюра фото в рамке и подпись рядом */
+.doc-award {
+  display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; align-items: center;
+  margin-top: 12px; padding: 8px; border-radius: 14px; border: 1px solid var(--line);
+  color: var(--mist); font-size: 13.5px; line-height: 1.35; text-decoration: none;
+}
+.doc-award:hover { border-color: var(--steel); }
+.doc-award img { display: block; width: 64px; height: 84px; object-fit: cover; border-radius: 8px; }
 .doc h3 { font-size: 1.35rem; }
 .doc-role { margin: 4px 0 8px; color: var(--mist); font-size: 15px; }
 .doc ul { margin: 0; padding: 0 0 0 18px; color: var(--steel); font-size: 14px; }
