@@ -13,6 +13,24 @@ const dist = path.join(root, 'dist');
 fs.rmSync(dist, { recursive: true, force: true });
 fs.cpSync(src, dist, { recursive: true });
 
+// Метка версии у своих .js и .css в HTML (card.js?v=1a2b3c4d5e): хостинг разрешает браузеру
+// хранить файлы до 10 минут, и без метки после обновления сайта он показывал бы старые данные.
+const crypto = require('crypto');
+(function stamp(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) { stamp(p); continue; }
+    if (!e.name.endsWith('.html')) continue;
+    const html = fs.readFileSync(p, 'utf8').replace(/\s(src|href)="([^"?#:]+\.(?:js|css))"/g, (m, attr, ref) => {
+      const file = path.join(path.dirname(p), ref);
+      if (!fs.existsSync(file)) return m;
+      const v = crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 10);
+      return ` ${attr}="${ref}?v=${v}"`;
+    });
+    fs.writeFileSync(p, html);
+  }
+})(dist);
+
 let files = 0, bytes = 0;
 (function walk(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
