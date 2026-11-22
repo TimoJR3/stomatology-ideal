@@ -16,11 +16,11 @@ const CARD = {
   telegram: "",                 // ник в Telegram без @ (пусто — вместо кнопки будет «В контакты»)
   instagram: "https://www.instagram.com/ideal_ortodont/", // ссылка на профиль Instagram (только https://)
 
-  address: "Республика Дагестан, г. Дербент, пер. Карла Маркса, 12",
+  address: "Республика Дагестан, г. Дербент, ул. Буйнакского, 49А",
   hours: "", // часы работы, например «Пн–Пт 9:00–19:00» (пусто — строка скрыта)
   payment: "Возможна рассрочка на лечение", // строка «Оплата» в контактах (пусто — скрыта)
-  mapUrl: "https://yandex.ru/maps/-/CXWwyEJ9",
-  map2gisUrl: "https://2gis.ru/search/%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D0%BF%D0%B5%D1%80%D0%B5%D1%83%D0%BB%D0%BE%D0%BA%20%D0%9A%D0%B0%D1%80%D0%BB%D0%B0%20%D0%9C%D0%B0%D1%80%D0%BA%D1%81%D0%B0%2C%2012",
+  mapUrl: "https://yandex.ru/maps/?text=%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%91%D1%83%D0%B9%D0%BD%D0%B0%D0%BA%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%2C%2049%D0%90",
+  map2gisUrl: "https://2gis.ru/search/%D0%94%D0%B5%D1%80%D0%B1%D0%B5%D0%BD%D1%82%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%91%D1%83%D0%B9%D0%BD%D0%B0%D0%BA%D1%81%D0%BA%D0%BE%D0%B3%D0%BE%2C%2049%D0%90",
   social: [                             // строка «Мы в сети», только https://
     ["Instagram", "https://www.instagram.com/ideal_ortodont/"],
   ],
@@ -28,7 +28,7 @@ const CARD = {
   // Врачи. У каждого могут быть свои телефон / WhatsApp / Telegram (пустые не показываются).
   // Без фото показывается монограмма — инициалы из name. Фото (необязательно): photo: "team/имя.webp".
   team: [
-    { name: "Абдул Гасанов", role: "Врач-стоматолог-ортодонт высшей категории",
+    { name: "Абдулхалик Гасанов", role: "Врач-стоматолог-ортодонт высшей категории",
       facts: ["Стаж 25 лет", "Образование: Дагестанский государственный медицинский университет"],
       phoneTel: "", whatsapp: "", telegram: "",
       // awards — награды и сертификаты: [файл в src/card/awards/, подпись]; ряд листается вбок
