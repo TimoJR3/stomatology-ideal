@@ -14,6 +14,17 @@ const read = (p) => fs.readFileSync(path.join(SRC, p), 'utf8');
 const html = read('index.html');
 const isLocal = (u) => !/^(https?:|mailto:|tel:|data:|#|\/\/)/i.test(u);
 
+test('домашний адрес IDEAL открывает страницу клиники, сохраняя параметры ссылки', () => {
+  const route = read('js/ideal-domain.js');
+  for (const hostname of ['stomatology-ideal.ru', 'www.stomatology-ideal.ru', 'timojr3.github.io']) {
+    const location = new URL(`https://${hostname}/?from=qr#doctors`);
+    let destination;
+    location.replace = (url) => { destination = url; };
+    vm.runInNewContext(route, { location, URL });
+    assert.equal(destination, hostname === 'timojr3.github.io' ? undefined : `https://${hostname}/card/?from=qr#doctors`);
+  }
+});
+
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
