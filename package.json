@@ -33,7 +33,7 @@
     "globals": "17.14.0",
     "html-validate": "11.21.1",
     "qrcode": "1.5.4",
-    "stylelint": "18.0.0",
-    "stylelint-config-recommended": "19.0.0"
+    "stylelint": "18.1.0",
+    "stylelint-config-recommended": "19.1.0"
   }
 }
